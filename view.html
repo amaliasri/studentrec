@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Student</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Student Management</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Student Details Section -->
+    <div class="container mt-5">
+        <h1>Student Details</h1>
+        <div id="studentDetails" class="card mt-4">
+            <div class="card-body">
+                <p class="card-text"><strong>ID :</strong> <span id="studentId"></span></p>
+                <p class="card-text"><strong>Name :</strong> <span id="studentName"></span></p>
+                <p class="card-text"><strong>Email :</strong> <span id="studentEmail"></span></p>
+                <p class="card-text"><strong>Phone :</strong> <span id="studentPhone"></span></p>
+                <p class="card-text"><strong>Date of Birth :</strong> <span id="studentDob"></span></p>
+                <p class="card-text"><strong>Address :</strong> <span id="studentAddress"></span></p>
+            </div>
+        </div>
+        <a href="index.html" class="btn btn-primary mt-3">Back to List</a>
+    </div>
+
+     <script src="js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Get the student ID from the URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentId = urlParams.get('id');
+
+        // Fetch student details from the backend API
+        if (studentId) {
+            fetch(`http://akproject.free.nf/students/${studentId}`)
+                .then(response => response.json())
+                .then(student => {
+                    // Populate the student details in the HTML
+                    document.getElementById('studentId').textContent = student.id;
+                    document.getElementById('studentName').textContent = student.student_name;
+                    document.getElementById('studentEmail').textContent = student.email;
+                    document.getElementById('studentPhone').textContent = student.phone;
+                    document.getElementById('studentDob').textContent = student.date_of_birth;
+                    document.getElementById('studentAddress').textContent = student.address;
+                })
+                .catch(error => {
+                    console.error('Error fetching student details:', error);
+                    alert('Failed to fetch student details. Please try again.');
+                });
+        } else {
+            alert('Invalid student ID.');
+            location.href = 'index.html'; // Redirect to the homepage if no ID is provided
+        }
+    </script>
+</body>
+</html>
